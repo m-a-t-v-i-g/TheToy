@@ -6,6 +6,7 @@
 #include "BaseCharacter.h"
 #include "RunnerCharacter.generated.h"
 
+class UBehaviorTree;
 class USphereComponent;
 class UInteractionComponent;
 
@@ -20,9 +21,12 @@ public:
 	static FName InteractionComponentName;
 	
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character|Runner")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Runner")
 	TObjectPtr<USphereComponent> InteractionSphere;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character|Runner")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Runner")
 	TObjectPtr<UInteractionComponent> InteractionComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Runner|Behavior")
+	TObjectPtr<UBehaviorTree> BehaviorTreeAsset;
 };

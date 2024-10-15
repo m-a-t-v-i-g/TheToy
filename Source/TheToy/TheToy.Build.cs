@@ -10,7 +10,7 @@ public class TheToy : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new[]
 		{
-			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput"
+			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "AIModule"
 		});
 		
 		PrivateDependencyModuleNames.AddRange(new[]

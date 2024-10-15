@@ -14,9 +14,9 @@ class THETOY_API UInteractionComponent : public UActorComponent
 public:
 	UInteractionComponent();
 
-	void SetupInteractionComponent(UShapeComponent* Shape);
+	void SetInteractionCollision(UShapeComponent* Shape);
 
 protected:
-	UPROPERTY(VisibleInstanceOnly, Category = "Interaction")
+	UPROPERTY(EditAnywhere, Category = "Interaction Component")
 	TObjectPtr<UShapeComponent> Collision;
 };

@@ -9,12 +9,6 @@
 AHeroCharacter::AHeroCharacter()
 {
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
-	
-	FirstPersonHands = CreateDefaultSubobject<USkeletalMeshComponent>("CharacterMesh1");
-	FirstPersonHands->SetOnlyOwnerSee(true);
-	FirstPersonHands->SetupAttachment(GetRootComponent());
-	FirstPersonHands->bCastDynamicShadow = false;
-	FirstPersonHands->CastShadow = false;
 }
 
 void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

@@ -23,9 +23,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Character")
 	TObjectPtr<UPlayerInputConfig> InputConfig;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character")
-	TObjectPtr<USkeletalMeshComponent> FirstPersonHands;
-	
 	void InputMove(const FInputActionValue& Value);
 	void InputLook(const FInputActionValue& Value);
 };

@@ -2,6 +2,7 @@
 
 #include "RunnerCharacter.h"
 #include "InteractionComponent.h"
+#include "AI/TheToyAIController.h"
 #include "Components/SphereComponent.h"
 
 FName ARunnerCharacter::InteractionComponentName {"InteractionComp"};
@@ -12,4 +13,7 @@ ARunnerCharacter::ARunnerCharacter()
 	InteractionSphere->SetupAttachment(GetRootComponent());
 	
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(InteractionComponentName);
+	InteractionComponent->SetInteractionCollision(InteractionSphere);
+
+	AIControllerClass = ATheToyAIController::StaticClass();
 }
