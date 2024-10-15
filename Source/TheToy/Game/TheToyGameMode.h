@@ -6,7 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "TheToyGameMode.generated.h"
 
-UCLASS(minimalapi)
+UCLASS(MinimalAPI)
 class ATheToyGameMode : public AGameModeBase
 {
 	GENERATED_BODY()

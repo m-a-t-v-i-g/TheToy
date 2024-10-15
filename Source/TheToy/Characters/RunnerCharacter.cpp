@@ -2,7 +2,7 @@
 
 #include "RunnerCharacter.h"
 #include "InteractionComponent.h"
-#include "AI/TheToyAIController.h"
+#include "TheToyAIController.h"
 #include "Components/SphereComponent.h"
 
 FName ARunnerCharacter::InteractionComponentName {"InteractionComp"};

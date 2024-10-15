@@ -2,13 +2,24 @@
 
 #include "HeroCharacter.h"
 #include "EnhancedInputComponent.h"
+#include "HeroToyComponent.h"
 #include "InputActionValue.h"
+#include "PlayerInputConfig.h"
+#include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "TheToy/Input/PlayerInputConfig.h"
+
+FName AHeroCharacter::ToyComponentName {"ToyComponent"};
 
 AHeroCharacter::AHeroCharacter()
 {
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
+	CameraComponent->SetupAttachment(GetRootComponent());
+	CameraComponent->SetRelativeLocation(FVector(-10.f, 0.f, 60.f));
+	CameraComponent->bUsePawnControlRotation = true;
+
+	ToyComponent = CreateDefaultSubobject<UHeroToyComponent>(ToyComponentName);
 }
 
 void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

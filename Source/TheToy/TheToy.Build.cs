@@ -21,8 +21,10 @@ public class TheToy : ModuleRules
 		PublicIncludePaths.AddRange(new[]
 		{
 			"TheToy",
+			"TheToy/AI",
 			"TheToy/Characters",
 			"TheToy/Components",
+			"TheToy/Game",
 			"TheToy/Input",
 			"TheToy/Player"
 		});
