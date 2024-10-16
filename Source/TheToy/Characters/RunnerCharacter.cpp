@@ -6,6 +6,8 @@
 #include "TheToyAIController.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Net/UnrealNetwork.h"
 
 FName ARunnerCharacter::InteractionComponentName {"InteractionComp"};
 FName ARunnerCharacter::ScoreComponentName {"ScoreComponent"};
@@ -26,6 +28,12 @@ ARunnerCharacter::ARunnerCharacter()
 	AIControllerClass = ATheToyAIController::StaticClass();
 }
 
+void ARunnerCharacter::OnRegistration(const FRunnerInfo& NewRunnerInfo)
+{
+	RunnerInfo = NewRunnerInfo;
+	GetCharacterMovement()->MaxWalkSpeed = NewRunnerInfo.Speed;
+}
+
 void ARunnerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -35,13 +43,25 @@ void ARunnerCharacter::PostInitializeComponents()
 		ScoreComponent->SetupScoreComponent();
 	}
 
-	if (StateWidget)
-	{
-		InitializeRunnerWidget();
-	}
-
 	if (InteractionComponent)
 	{
 		InteractionComponent->SetupInteractionComponent();
 	}
+}
+
+void ARunnerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (StateWidget)
+	{
+		InitializeRunnerWidget();
+	}
+}
+
+void ARunnerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ThisClass, RunnerInfo);
 }

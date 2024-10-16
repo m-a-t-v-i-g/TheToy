@@ -36,8 +36,8 @@ void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(InputConfig->JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(InputConfig->JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
-		EnhancedInputComponent->BindAction(InputConfig->JumpAction, ETriggerEvent::Started, this, &AHeroCharacter::InputShoot);
-		EnhancedInputComponent->BindAction(InputConfig->JumpAction, ETriggerEvent::Completed, this, &AHeroCharacter::InputToggleToy);
+		EnhancedInputComponent->BindAction(InputConfig->ShootAction, ETriggerEvent::Started, this, &AHeroCharacter::InputShoot);
+		EnhancedInputComponent->BindAction(InputConfig->ToggleToyAction, ETriggerEvent::Completed, this, &AHeroCharacter::InputToggleToy);
 	}
 }
 
@@ -63,10 +63,16 @@ void AHeroCharacter::InputLook(const FInputActionValue& Value)
 
 void AHeroCharacter::InputShoot(const FInputActionValue& Value)
 {
-	
+	if (ToyComponent)
+	{
+		ToyComponent->LaunchToy();
+	}
 }
 
 void AHeroCharacter::InputToggleToy(const FInputActionValue& Value)
 {
-	
+	if (ToyComponent)
+	{
+		ToyComponent->ToggleToy();
+	}
 }

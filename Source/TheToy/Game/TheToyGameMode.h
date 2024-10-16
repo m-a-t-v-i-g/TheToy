@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "TheToyGameMode.generated.h"
 
+class URunnerConfig;
+
 UCLASS(MinimalAPI)
 class ATheToyGameMode : public AGameModeBase
 {
@@ -13,6 +15,12 @@ class ATheToyGameMode : public AGameModeBase
 
 public:
 	ATheToyGameMode();
+
+	virtual void StartPlay() override;
+	
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Runner")
+	TObjectPtr<URunnerConfig> RunnerConfig;
 };
 
 
