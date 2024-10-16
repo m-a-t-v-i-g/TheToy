@@ -15,5 +15,6 @@ public:
 	UHeroToyComponent();
 
 protected:
-	
+	UPROPERTY(EditDefaultsOnly, Category = "Toy Component")
+	TObjectPtr<UDataTable> ToysDataTable;
 };
