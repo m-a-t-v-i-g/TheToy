@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "HeroToyComponent.generated.h"
 
+class AToyActor;
+
 UCLASS(ClassGroup = "The Toy", meta = (BlueprintSpawnableComponent))
 class THETOY_API UHeroToyComponent : public UActorComponent
 {
@@ -14,7 +16,18 @@ class THETOY_API UHeroToyComponent : public UActorComponent
 public:
 	UHeroToyComponent();
 
+	void ToggleToy();
+
+	void LaunchToy();
+	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Toy Component")
 	TObjectPtr<UDataTable> ToysDataTable;
+
+	UPROPERTY(EditInstanceOnly, Category = "Toy Component")
+	TObjectPtr<AToyActor> CurrentToy;
+
+private:
+	UPROPERTY(EditInstanceOnly, Category = "Toy Component")
+	bool bCanToggleToy = true;
 };

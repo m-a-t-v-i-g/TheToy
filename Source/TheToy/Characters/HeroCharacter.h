@@ -35,4 +35,7 @@ protected:
 	
 	void InputMove(const FInputActionValue& Value);
 	void InputLook(const FInputActionValue& Value);
+
+	void InputShoot(const FInputActionValue& Value);
+	void InputToggleToy(const FInputActionValue& Value);
 };

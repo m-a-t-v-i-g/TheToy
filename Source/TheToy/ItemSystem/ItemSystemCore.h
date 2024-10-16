@@ -13,7 +13,10 @@ struct FToysTableRow : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, Category = "Item")
 	TSubclassOf<AToyActor> ToyActorClass = AToyActor::StaticClass();
-	
+
+	UPROPERTY(EditAnywhere, Category = "Item")
+	TObjectPtr<UStaticMesh> PreviewMesh;
+
 	UPROPERTY(EditAnywhere, Category = "Item")
 	int Cost = 0;
 };

@@ -5,4 +5,15 @@
 UHeroToyComponent::UHeroToyComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	SetIsReplicatedByDefault(true);
+}
+
+void UHeroToyComponent::ToggleToy()
+{
+	
+}
+
+void UHeroToyComponent::LaunchToy()
+{
+	
 }
