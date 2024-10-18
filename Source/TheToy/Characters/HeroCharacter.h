@@ -6,6 +6,7 @@
 #include "BaseCharacter.h"
 #include "HeroCharacter.generated.h"
 
+struct FToyHandle;
 struct FInputActionValue;
 class UCameraComponent;
 class UPlayerInputConfig;
@@ -20,6 +21,8 @@ public:
 	AHeroCharacter();
 
 	static FName ToyComponentName;
+
+	virtual void PostInitializeComponents() override;
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -30,6 +33,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character")
 	TObjectPtr<UCameraComponent> CameraComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character")
+	TObjectPtr<UStaticMeshComponent> ToyMesh1P;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character")
+	TObjectPtr<UStaticMeshComponent> ToyMesh3P;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Character")
 	TObjectPtr<UHeroToyComponent> ToyComponent;
 	
@@ -38,4 +47,10 @@ protected:
 
 	void InputShoot(const FInputActionValue& Value);
 	void InputToggleToy(const FInputActionValue& Value);
+
+	void DrawToy(const FToyHandle& ToyHandle);
+	
+	void OnToyChanged(const FToyHandle& ToyHandle);
+	void OnToyLaunched();
+	void OnToyGrabbed();
 };

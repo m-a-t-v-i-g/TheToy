@@ -13,4 +13,6 @@ class THETOY_API ATheToyAIController : public AAIController
 
 public:
 	ATheToyAIController();
+
+	virtual void PostInitializeComponents() override;
 };

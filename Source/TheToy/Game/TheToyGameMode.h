@@ -17,10 +17,15 @@ public:
 	ATheToyGameMode();
 
 	virtual void StartPlay() override;
+
+	virtual void BeginPlay() override;
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Runner")
 	TObjectPtr<URunnerConfig> RunnerConfig;
+
+	UFUNCTION()
+	void OnGameEnd(const FTheToyGameResult& GameResult);
 };
 
 

@@ -7,6 +7,7 @@
 #include "PlayerInputConfig.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "ItemSystem/ItemSystemCore.h"
 
 FName AHeroCharacter::ToyComponentName {"ToyComponent"};
 
@@ -19,7 +20,26 @@ AHeroCharacter::AHeroCharacter()
 	CameraComponent->SetRelativeLocation(FVector(-10.f, 0.f, 60.f));
 	CameraComponent->bUsePawnControlRotation = true;
 
+	ToyMesh1P = CreateDefaultSubobject<UStaticMeshComponent>("ToyMesh1P");
+	ToyMesh1P->SetupAttachment(CameraComponent);
+
+	ToyMesh3P = CreateDefaultSubobject<UStaticMeshComponent>("ToyMesh3P");
+	ToyMesh3P->SetupAttachment(GetMesh(), "ToySocket");
+
 	ToyComponent = CreateDefaultSubobject<UHeroToyComponent>(ToyComponentName);
+}
+
+void AHeroCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (ToyComponent)
+	{
+		ToyComponent->OnToyChanged.AddUObject(this, &AHeroCharacter::OnToyChanged);
+		ToyComponent->OnToyLaunched.AddUObject(this, &AHeroCharacter::OnToyLaunched);
+		ToyComponent->OnToyGrabbed.AddUObject(this, &AHeroCharacter::OnToyGrabbed);
+		ToyComponent->SetupToyComponent();
+	}
 }
 
 void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -75,4 +95,41 @@ void AHeroCharacter::InputToggleToy(const FInputActionValue& Value)
 	{
 		ToyComponent->ToggleToy();
 	}
+}
+
+void AHeroCharacter::DrawToy(const FToyHandle& ToyHandle)
+{
+	if (ToyComponent)
+	{
+		auto ToysDT = ToyComponent->ToysDataTable;
+		check(ToysDT);
+
+		if (auto Row = ToysDT->FindRow<FToysTableRow>(ToyHandle.RowName, ""))
+		{
+			ToyMesh1P->SetStaticMesh(Row->PreviewMesh);
+			ToyMesh3P->SetStaticMesh(Row->PreviewMesh);
+		}
+	}
+}
+
+void AHeroCharacter::OnToyChanged(const FToyHandle& ToyHandle)
+{
+	check(ToyComponent);
+	
+	DrawToy(ToyHandle);
+}
+
+void AHeroCharacter::OnToyLaunched()
+{
+	check(ToyMesh1P && ToyMesh3P);
+	
+	ToyMesh1P->SetStaticMesh(nullptr);
+	ToyMesh3P->SetStaticMesh(nullptr);
+}
+
+void AHeroCharacter::OnToyGrabbed()
+{
+	check(ToyComponent);
+
+	DrawToy(ToyComponent->GetCurrentToyHandle());
 }

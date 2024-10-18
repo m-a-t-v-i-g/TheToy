@@ -2,6 +2,7 @@
 
 #include "ToyActor.h"
 #include "Components/SphereComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 AToyActor::AToyActor()
 {
@@ -10,12 +11,22 @@ AToyActor::AToyActor()
 
 	PreviewMesh = CreateDefaultSubobject<UStaticMeshComponent>("Preview Mesh");
 	PreviewMesh->SetupAttachment(GetRootComponent());
+	
+	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("Projectile Component");
+	ProjectileMovement->UpdatedComponent = PhysicCollision;
+	ProjectileMovement->InitialSpeed = 3000.f;
+	ProjectileMovement->MaxSpeed = 3000.f;
+	ProjectileMovement->bRotationFollowsVelocity = true;
+	ProjectileMovement->bShouldBounce = true;
 
 	SetReplicates(true);
+	SetReplicatingMovement(true);
 }
 
 void AToyActor::Grab()
 {
+	OnGrab.Broadcast();
+	
 	DeactivateAndDestroy();
 }
 

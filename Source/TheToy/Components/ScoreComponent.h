@@ -8,6 +8,8 @@
 
 class AToyActor;
 
+DECLARE_MULTICAST_DELEGATE(FOnScoreUpdated);
+
 UCLASS(ClassGroup = "The Toy", meta = (BlueprintSpawnableComponent))
 class THETOY_API UScoreComponent : public UActorComponent
 {
@@ -16,6 +18,8 @@ class THETOY_API UScoreComponent : public UActorComponent
 public:
 	UScoreComponent();
 
+	FOnScoreUpdated OnScoreUpdated;
+	
 	void SetupScoreComponent();
 
 	UFUNCTION(BlueprintCallable, Category = "Score Component")

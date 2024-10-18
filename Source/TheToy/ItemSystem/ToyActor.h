@@ -7,13 +7,22 @@
 #include "GameFramework/Actor.h"
 #include "ToyActor.generated.h"
 
+class UProjectileMovementComponent;
 class USphereComponent;
+
+DECLARE_MULTICAST_DELEGATE(FOnGrabDelegate);
 
 USTRUCT()
 struct FToyHandle
 {
 	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditAnywhere, Category = "Item")
+	TSubclassOf<AToyActor> ToyActorClass = StaticClass<AToyActor>();
 
+	UPROPERTY(EditAnywhere, Category = "Item")
+	FName RowName;
+	
 	UPROPERTY(EditAnywhere, Category = "Item")
 	int Cost = 0;
 };
@@ -26,6 +35,8 @@ class THETOY_API AToyActor : public AActor, public IToyInterface
 public:
 	AToyActor();
 
+	FOnGrabDelegate OnGrab;
+	
 	virtual void Grab() override;
 
 	virtual AToyActor* GetToy() override;
@@ -57,6 +68,9 @@ protected:
 	FToyHandle ToyHandle;
 	
 private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
+
 	UPROPERTY(EditInstanceOnly, Category = "Toy")
 	bool bActive = false;
 };
