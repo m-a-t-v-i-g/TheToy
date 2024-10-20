@@ -30,5 +30,5 @@ void UScoreComponent::FetchToyInfo(const AToyActor* Toy)
 {
 	FToyHandle ToyInfo = Toy->GetToyInfo();
 	Score += ToyInfo.Cost;
-	OnScoreUpdated.Broadcast();
+	OnScoreUpdated.Broadcast(this);
 }

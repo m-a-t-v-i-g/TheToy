@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "TheToyGameMode.generated.h"
 
+struct FTheToyGameResult;
 class URunnerConfig;
 
 UCLASS(MinimalAPI)

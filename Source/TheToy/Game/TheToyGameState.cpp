@@ -21,21 +21,31 @@ void ATheToyGameState::OnGameTimerEnd()
 	FText RunnerName;
 	float MaxScore = 0;
 	bool bDrawnGame = false;
+
+	TArray<float> Winners;
 	
 	for (auto& Statistics : RunnerStatistics)
 	{
-		if (Statistics.Score == MaxScore)
-		{
-			RunnerName = FText::FromString("");
-			MaxScore = 0;
-			bDrawnGame = true;
-		}
 		if (Statistics.Score > MaxScore)
 		{
 			RunnerName = Statistics.RunnerName;
 			MaxScore = Statistics.Score;
-			bDrawnGame = false;
 		}
+	}
+
+	for (auto& Statistics : RunnerStatistics)
+	{
+		if (Statistics.Score == MaxScore)
+		{
+			Winners.Add(Statistics.Score);
+		}
+	}
+
+	if (Winners.Num() > 1)
+	{
+		RunnerName = FText::FromString("");
+		MaxScore = 0;
+		bDrawnGame = true;
 	}
 
 	GameResult.WinnerName = RunnerName;
@@ -76,6 +86,13 @@ FRunnerInfo ATheToyGameState::CreateInfoForRunner(const TArray<FText>& Names, co
 	if (auto ScoreComp = Runner->GetComponentByClass<UScoreComponent>())
 	{
 		ScoreComp->OnScoreUpdated.AddUObject(this, &ATheToyGameState::UpdateRunnerStatistics);
+
+		FRunnerStatisticHandle StatisticHandle;
+		StatisticHandle.RunnerName = NewRunnerInfo.RunnerName;
+		StatisticHandle.Score = ScoreComp->GetScore();
+		StatisticHandle.ScoreComponent = ScoreComp;
+		
+		RunnerStatistics.Add(StatisticHandle);
 	}
 	
 	return NewRunnerInfo;
@@ -99,7 +116,20 @@ void ATheToyGameState::Tick(float DeltaSeconds)
 	}
 }
 
-void ATheToyGameState::UpdateRunnerStatistics()
+void ATheToyGameState::UpdateRunnerStatistics(UScoreComponent* ScoreComponent)
 {
-	
+	for (FRunnerStatisticHandle& Stat : RunnerStatistics)
+	{
+		if (Stat.ScoreComponent == ScoreComponent)
+		{
+			Stat.Score = ScoreComponent->GetScore();
+			break;
+		}
+	}
+	OnUpdateRunnerStatistics.Broadcast();
+}
+
+void ATheToyGameState::OnRep_RunnerStatistics()
+{
+	OnUpdateRunnerStatistics.Broadcast();
 }

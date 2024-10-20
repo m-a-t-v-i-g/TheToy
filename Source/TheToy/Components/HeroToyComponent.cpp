@@ -74,20 +74,20 @@ void UHeroToyComponent::ServerLaunchToy_Implementation()
 		const FRotator SpawnRotation = GetOwner()->GetActorRotation();
 		const FVector SpawnLocation = GetOwner()->GetActorLocation() + SpawnRotation.RotateVector({100.0f, 0.0f, 45.0f});
 
-		FActorSpawnParameters ActorSpawnParams;
-		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+		FTransform SpawnTransform;
+		SpawnTransform.SetLocation(SpawnLocation);
+		SpawnTransform.SetRotation(FQuat(SpawnRotation));
 
-		if (AToyActor* Toy = World->SpawnActor<AToyActor>(CurrentToy.ToyActorClass, SpawnLocation, SpawnRotation, ActorSpawnParams))
+		if (AToyActor* Toy = World->SpawnActorDeferred<AToyActor>(CurrentToy.ToyActorClass, SpawnTransform, GetOwner(),
+		                                                          GetOwner<APawn>(),
+		                                                          ESpawnActorCollisionHandlingMethod::AlwaysSpawn))
 		{
-			Toy->InitializeToyInfo(CurrentToy);
 			LaunchedToy = Toy;
+			LaunchedToy->InitializeToyInfo(CurrentToy);
+			LaunchedToy->OnGrab.AddUObject(this, &UHeroToyComponent::OnGrabbedToy);
+			LaunchedToy->FinishSpawning(SpawnTransform);
+			LaunchedToy->ActivateToy();
 		}
-	}
-		
-	if (LaunchedToy)
-	{
-		LaunchedToy->OnGrab.AddUObject(this, &UHeroToyComponent::OnGrabbedToy);
-		LaunchedToy->ActivateToy();
 	}
 	
 	MulticastLaunchToy();
@@ -107,6 +107,7 @@ void UHeroToyComponent::OnGrabbedToy()
 	if (LaunchedToy)
 	{
 		LaunchedToy->OnGrab.RemoveAll(this);
+		LaunchedToy = nullptr;
 	}
 
 	MulticastOnGrabbedToy();

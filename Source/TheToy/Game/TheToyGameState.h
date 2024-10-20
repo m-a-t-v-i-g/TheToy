@@ -19,6 +19,9 @@ struct FRunnerStatisticHandle
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Statistics")
 	int Score = 0;
+
+	UPROPERTY(NotReplicated)
+	UScoreComponent* ScoreComponent;
 };
 
 USTRUCT(Blueprintable, BlueprintType)
@@ -37,6 +40,7 @@ struct FTheToyGameResult
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGameTimerEndDelegate, const FTheToyGameResult&, GameResult);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUpdateRunnerStatistics);
 
 UCLASS()
 class THETOY_API ATheToyGameState : public AGameStateBase
@@ -48,6 +52,9 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnGameTimerEndDelegate GameTimerEndDelegate;
+		
+	UPROPERTY(BlueprintAssignable)
+	FOnUpdateRunnerStatistics OnUpdateRunnerStatistics;
 	
 	void StartGameTimer(float GameTime);
 
@@ -66,10 +73,16 @@ protected:
 
 	virtual void Tick(float DeltaSeconds) override;
 	
-	void UpdateRunnerStatistics();
+	void UpdateRunnerStatistics(UScoreComponent* ScoreComponent);
+
+	UFUNCTION()
+	void OnRep_RunnerStatistics();
+	
+	UFUNCTION(BlueprintCallable, Category = "Statistics")
+	TArray<FRunnerStatisticHandle> GetRunnerStatistics() const { return RunnerStatistics; }
 	
 private:
-	UPROPERTY(EditInstanceOnly, Replicated, Category = "Statistics")
+	UPROPERTY(EditInstanceOnly, ReplicatedUsing = "OnRep_RunnerStatistics", Category = "Statistics")
 	TArray<FRunnerStatisticHandle> RunnerStatistics;
 
 	UPROPERTY(Replicated)

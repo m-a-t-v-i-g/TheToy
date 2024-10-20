@@ -25,9 +25,12 @@ AToyActor::AToyActor()
 
 void AToyActor::Grab()
 {
-	OnGrab.Broadcast();
+	if (bActive)
+	{
+		OnGrab.Broadcast();
 	
-	DeactivateAndDestroy();
+		DeactivateAndDestroy();
+	}
 }
 
 AToyActor* AToyActor::GetToy()
