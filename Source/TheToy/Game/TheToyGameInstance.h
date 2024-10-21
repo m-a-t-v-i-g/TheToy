@@ -15,7 +15,7 @@ struct FTheToyGameRules
 	float GameTime = 180.0f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rules")
-	int Bots = 5;
+	int Bots = 2;
 
 	void Clear()
 	{

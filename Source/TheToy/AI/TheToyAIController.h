@@ -14,5 +14,9 @@ class THETOY_API ATheToyAIController : public AAIController
 public:
 	ATheToyAIController();
 
-	virtual void PostInitializeComponents() override;
+	virtual void BeginPlay() override;
+	
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Perception")
+	TObjectPtr<UBehaviorTree> BehaviorTreeAsset;
 };
