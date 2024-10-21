@@ -31,13 +31,35 @@ void ATheToyGameMode::StartPlay()
 	ToyGameState->GameTimerEndDelegate.AddDynamic(this, &ATheToyGameMode::OnGameEnd);
 	ToyGameState->StartGameTimer(GameRules.GameTime);
 	
+	TArray<AActor*> Runners;
+	
 	for (TActorIterator<AActor> It(GetWorld()); It; ++It)
 	{
 		AActor* Actor = *It;
-		if (auto RunnerInterface = Cast<IRunnerInterface>(Actor))
+		if (Actor->Implements<URunnerInterface>())
+		{
+			Runners.AddUnique(Actor);
+		}
+	}
+
+	if (Runners.Num() > GameRules.Bots)
+	{
+		uint8 Difference = Runners.Num() - GameRules.Bots;
+		
+		for (uint8 i = 0; i < Difference; i++)
+		{
+			uint8 Index = FMath::RandRange(0, Runners.Num() - 1);
+			Runners[Index]->Destroy();
+			Runners.RemoveAt(Index);
+		}
+	}
+	
+	for (auto Runner : Runners)
+	{
+		if (auto RunnerInterface = Cast<IRunnerInterface>(Runner))
 		{
 			FRunnerInfo RunnerInfo = ToyGameState->CreateInfoForRunner(
-				RunnerConfig->RunnerNames, RunnerConfig->AvailableSpeeds, Actor);
+				RunnerConfig->RunnerNames, RunnerConfig->AvailableSpeeds, Runner);
 			RunnerInterface->OnRegistration(RunnerInfo);
 		}
 	}
